@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
+    "test": "jest && yarn run detox",
+    "detox": "detox build && detox test",
     "storybook": "storybook start -p 7007"
   },
   "dependencies": {
@@ -26,9 +27,16 @@
     "redux-saga": "^0.16.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.4.8",
+    "@storybook/addon-links": "^3.4.8",
+    "@storybook/addons": "^3.4.8",
+    "@storybook/react-native": "^3.4.8",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-jest": "23.4.0",
     "babel-preset-react-native": "^5",
+    "babel-runtime": "^6.26.0",
+    "detox": "^8.0.0",
     "eslint": "^5.2.0",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-detox": "^1.0.0",
@@ -37,16 +45,28 @@
     "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-react-native": "^3.2.1",
     "jest": "23.4.1",
+    "react-dom": "16.4.1",
     "react-test-renderer": "16.4.1",
-    "@storybook/react-native": "^3.4.8",
-    "@storybook/addon-actions": "^3.4.8",
-    "@storybook/addon-links": "^3.4.8",
-    "@storybook/addons": "^3.4.8",
-    "babel-core": "^6.26.3",
-    "babel-runtime": "^6.26.0",
-    "react-dom": "16.4.1"
+    "redux-saga-testing": "^1.0.5"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testMatch": [
+      "<rootDir>/src/**/*.test.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation)"
+    ]
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/IdeaMe.app",
+        "build": "xcodebuild -project ios/IdeaMe.xcodeproj -scheme IdeaMe -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    },
+    "test-runner": "jest"
   }
 }
